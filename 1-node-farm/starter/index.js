@@ -1,5 +1,6 @@
 const fs = require('fs')
 const http = require('http')
+const url = require('url')
 //blocking synchronous way
 /*
 const data = fs.readFileSync('./txt/input.txt', 'utf-8');
@@ -26,12 +27,35 @@ fs.readFile('./txt/startss.txt', 'utf-8', (err, data1) => {
 console.log('last line');
 */
 
+
 ///////////Server creation//////////
+//read data from file
+const data = fs.readFileSync(`${__dirname}/dev-data/data.json`, 'utf-8')
+const dataObj = JSON.parse(data)
+
 //1.create server
-const server = http.createServer((request, response) => {
-    response.end('hello from server');
+const server = http.createServer((req, res) => {
+    console.log(req.url);
+    const pathName = req.url
+    if (pathName === '/' || pathName === '/overview') {
+        res.end('this overview');
+    }
+    else if (pathName === '/product') {
+        res.end('this is product');
+    }
+    else if (pathName === '/api') {
+        res.writeHead(200, { 'Content-type': 'application/json' })
+        res.end(data);
+    }
+    else {
+        res.writeHead(404, {
+            'Content-type': 'html',
+            'my-own-header': 'hello Aj'
+        })
+        res.end('<h1>page not found</h1>');
+    }
 });
 //2 listening incoming req from client
 server.listen(8000, '127.0.0.1', () => {
-    console.log('server started listening requests on port 8000');
+    console.log('server started listening reqs on port 8000');
 })
