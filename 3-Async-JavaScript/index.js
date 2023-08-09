@@ -18,6 +18,27 @@ const writeFilePro = (file, data) => {
       })
    })
 }
+
+const getDogPic=async ()=>{
+   try {
+      const data = await readFilePro(`${__dirname}/dog.txt`);
+      console.log(`Breed: ${data}`);
+
+      const res = await superagent.get(`https://dog.ceo/api/breed/${data}/image/random`);
+      console.log(res?.body.message);
+
+      await fs.writeFile(`imgaeDogs.txt`, res.body.message);
+      cconsole.log('image has been saved');
+      
+   } catch (error) {
+      console.log(error.message);
+   }
+ 
+}
+
+getDogPic();
+
+/*
 readFilePro(`${__dirname}/dog.txt`)
    .then((data) => {
    console.log(`Breed: ${data}`);   
@@ -29,4 +50,4 @@ readFilePro(`${__dirname}/dog.txt`)
    cconsole.log('image has been saved');
 })
    .catch(err => console.log('error ::', err.message));
- 
+ */
