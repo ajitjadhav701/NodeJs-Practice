@@ -29,14 +29,36 @@ const getDogPic=async ()=>{
 
       await fs.writeFile(`imgaeDogs.txt`, res.body.message);
       cconsole.log('image has been saved');
-      
+
    } catch (error) {
       console.log(error.message);
+      throw(err);
    }
  
+   return "from function reacy"
 }
 
-getDogPic();
+// 2. returning values from async function
+(async()=>{
+   try {
+      console.log('1 first log message');
+      const x=await getDogPic();
+      console.log(x);
+      console.log('2 secondlog message');
+   } catch (err) {
+      console.log('Error: ');
+   }
+})();
+/*
+// 1. returning values from async function
+console.log('1 first log message');
+getDogPic().then((x)=>{
+   console.log(x);
+}).catch(err=>{
+   console.log('Error: ');
+})
+console.log('2 secondlog message');
+*/
 
 /*
 readFilePro(`${__dirname}/dog.txt`)
