@@ -23,11 +23,17 @@ const getDogPic=async ()=>{
    try {
       const data = await readFilePro(`${__dirname}/dog.txt`);
       console.log(`Breed: ${data}`);
+      //waiting for multiple promises simultaneously
+      const res1Pro = superagent.get(`https://dog.ceo/api/breed/${data}/image/random`);
+      const res2Pro = superagent.get(`https://dog.ceo/api/breed/${data}/image/random`);
+      const res3Pro = superagent.get(`https://dog.ceo/api/breed/${data}/image/random`);
 
-      const res = await superagent.get(`https://dog.ceo/api/breed/${data}/image/random`);
+      const all =await PromiseRejectionEvent.all([res1Pro, res2Pro, res3Pro]);
+      const imgs=all.map(el=>el.body.message)
+      console.log(imgs);
       console.log(res?.body.message);
 
-      await fs.writeFile(`imgaeDogs.txt`, res.body.message);
+      await fs.writeFile(`imgaeDogs.txt`, imgs.join('\n'));
       cconsole.log('image has been saved');
 
    } catch (error) {
